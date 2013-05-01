@@ -20,7 +20,9 @@ describe MessageConductor do
 
       context "for unkeyed messages" do
         it "round robins which partition the message should go to" do
-          [0,1,0,1].each do |destination|
+          pattern = [0,1,0,1,0,1,0,1,0,1,0]
+          pattern.slice!(0..@mc.destination("test").first)
+          pattern.each do |destination|
             expect(@mc.destination("test").first).to eq(destination)
           end
         end
