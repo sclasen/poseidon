@@ -12,7 +12,7 @@ module Poseidon
     def initialize(topics_metadata, partitioner)
       @topics_metadata    = topics_metadata
       @partitioner        = partitioner
-      @partition_counter  = -1 
+      @partition_counter  = rand(100)
     end
 
     # Determines which partition a message should be sent to.
