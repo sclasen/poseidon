@@ -41,7 +41,7 @@ module Poseidon
                                 required_acks,
                                 timeout,
                                 messages_for_topics)
-      puts "PRODUCE CORRELATION #{req.common.correlation_id} from CLIENT #{@client_id} TO #{@host} #{@port}"
+      puts "KAFKADEBUG PRODUCE CORRELATION #{req.common.correlation_id} from CLIENT #{@client_id} TO #{@host} #{@port}"
       send_request(req)
       if required_acks != 0
         read_response(ProduceResponse)

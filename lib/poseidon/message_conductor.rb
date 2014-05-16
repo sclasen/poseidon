@@ -32,6 +32,7 @@ module Poseidon
       if topic_metadata && topic_metadata.leader_available?
         partition_id = determine_partition(topic_metadata, key)
         broker_id    = topic_metadata.partitions[partition_id].leader || NO_BROKER
+        puts "KAFKADEBUG LEADER FOR #{partition_id} is #{broker_id}"
       else
         partition_id  = NO_PARTITION
         broker_id     = NO_BROKER
