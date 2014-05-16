@@ -50,7 +50,7 @@ module Poseidon
         end
 
         messages_to_send.messages_for_brokers(@message_conductor).each do |messages_for_broker|
-          if send_to_broker(messages_for_broker)
+          if sent_ok(send_to_broker(messages_for_broker))
             messages_to_send.successfully_sent(messages_for_broker)
           end
         end
@@ -114,6 +114,28 @@ module Poseidon
                                     to_send)
     rescue Connection::ConnectionFailedError
       false
+    end
+
+    def sent_ok(produce_response)
+      if !produce_response
+        false
+      elsif @required_acks == 0
+        true
+      else
+        has_errors = produce_response.topic_response.reduce(false){ |errors, response|
+          errors || response.partitions.reduce(false){ |part_errors, part_response|
+            part_errors || has_error(response, part_response)
+          }
+        }
+        ! has_errors
+      end
+    end
+
+    def has_error(response, part_response)
+      if part_response.error == 6
+        refresh_metadata(response.topic)
+      end
+      part_response.error != 0
     end
   end
 end
