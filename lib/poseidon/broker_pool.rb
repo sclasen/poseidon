@@ -29,6 +29,7 @@ module Poseidon
     # @param [Hash<Integer,Hash>] brokers
     #   Hash of broker_id => { :host => host, :port => port }
     def update_known_brokers(brokers)
+      @brokers.values(&:close)
       @brokers.update(brokers)
       nil
     end
